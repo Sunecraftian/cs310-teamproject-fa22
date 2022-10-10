@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter;
 import org.json.simple.*;
 
 
-/* Suneet Sharma was Here */
+/* Suni was Here */
 /* Jailon Lawrence was Here */
 
 public class Main {
