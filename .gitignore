@@ -1,3 +1,4 @@
+.idea
 build/
 dist/
 nbproject/
@@ -9,3 +10,4 @@ manifest.mf
 .Spotlight-V100
 .Trashes
 Thumbs.db
+cs310-teamproject-fa22.iml
