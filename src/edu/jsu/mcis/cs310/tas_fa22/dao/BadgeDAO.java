@@ -12,7 +12,6 @@ public class BadgeDAO {
     BadgeDAO(DAOFactory daoFactory) {
 
         this.daoFactory = daoFactory;
-
     }
 
     public Badge find(String id) {
