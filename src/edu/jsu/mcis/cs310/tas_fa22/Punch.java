@@ -31,7 +31,7 @@ public class Punch {
         this.originaltimestamp = originaltimestamp;
         this.adjustmentType = PunchAdjustmentType.SHIFT_START;
     }
-
+    public Integer getId() { return id; }
     public Badge getBadge() {
         return badge;
     }

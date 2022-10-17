@@ -73,7 +73,6 @@ public class PunchDAO {
         return punch;
     }
 
-    /* TODO @Suni */
 
     // Insert Punch Into Database \\
     public int create(Punch punch) {
@@ -87,7 +86,7 @@ public class PunchDAO {
 
             if (conn.isValid(0)) {
                 ps = conn.prepareStatement(QUERY_CREATE);
-                ps.setInt(1, 0); // id
+                ps.setInt(1, punch.getId()); // id
                 ps.setInt(2, punch.getTerminalid()); // terminalid
                 ps.setString(3, punch.getBadge().getId()); // badgeid
                 ps.setString(4, punch.getOriginaltimestamp().toString()); // timestamp
@@ -109,5 +108,4 @@ public class PunchDAO {
 
         return update;
     }
-    /*TODO @Suni */
 }
