@@ -2,7 +2,6 @@ package edu.jsu.mcis.cs310.tas_fa22;
 
 import edu.jsu.mcis.cs310.tas_fa22.dao.*;
 import org.junit.*;
-import static org.junit.Assert.*;
 
 public class PunchAdjustTest {
 
