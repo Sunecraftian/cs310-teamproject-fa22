@@ -12,6 +12,7 @@ public class Department {
         this.description = description;
         this.terminal_id = terminal_id;
     }
+
     //Getter Methods
     public int getId() {
         return id;
@@ -23,6 +24,12 @@ public class Department {
 
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public String toString() {
+        String results = "#"+ getId() + "("+getDescription()+")"+ "Terminal Id: "+ getTerminal_id();
+        return results;
     }
 
 }
