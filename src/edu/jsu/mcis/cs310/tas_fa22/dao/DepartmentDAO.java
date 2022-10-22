@@ -33,7 +33,7 @@ public class DepartmentDAO {
                if(hasResults){
                    rs = ps.getResultSet();
                    while (rs.next()){
-                       String description = rs.getString("department");
+                       String description = rs.getString("description");
                        Integer terminal_id = rs.getInt("terminalid");
                        department = new Department(id, description, terminal_id);
                    }

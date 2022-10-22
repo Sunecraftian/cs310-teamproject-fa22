@@ -28,7 +28,7 @@ public class Department {
 
     @Override
     public String toString() {
-        String results = "#"+ getId() + "("+getDescription()+")"+ "Terminal Id: "+ getTerminal_id();
+        String results = "#"+ getId() + " ("+getDescription()+"), "+ "Terminal ID: "+ getTerminal_id();
         return results;
     }
 

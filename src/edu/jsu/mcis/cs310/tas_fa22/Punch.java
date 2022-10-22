@@ -2,6 +2,7 @@ package edu.jsu.mcis.cs310.tas_fa22;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 @SuppressWarnings("ALL")
 public class Punch {
@@ -34,17 +35,13 @@ public class Punch {
     }
 
     public String printOriginal() {
-        String original = "#";
-        String badgeID = getBadge().getId();
-        String pType = getPunchtype().toString();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E MM/dd/yyyy HH:mm:ss");
-        String timeStamp = getOriginaltimestamp().format(formatter);
+        String result = String.format("#%s %s: %s", getBadge().getId(), getPunchtype().toString(),
+                getOriginaltimestamp().format(DateTimeFormatter.ofPattern("E MM/dd/yyyy HH:mm:ss"))).toUpperCase(Locale.ROOT);
 
-        original += badgeID + " " + pType + ": " + timeStamp;
-
-        return original;
+        return result;
     }
     public Integer getId() { return id; }
+
     public Badge getBadge() {
         return badge;
     }
