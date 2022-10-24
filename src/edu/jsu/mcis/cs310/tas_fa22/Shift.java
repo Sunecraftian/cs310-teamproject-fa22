@@ -6,81 +6,81 @@ import java.time.*;
 public class Shift {
 
     //private final int lunchduration, shiftduration;
-    private int GracePeriod, RoundInterval, Dock, Id, lunchThresh, LunchDuration,
-    ShiftDuration;
+    private int graceperiod, roundinterval, dock, id, lunchthresh, lunchduration,
+    shiftduration;
 
     private String description;
-    private LocalTime shiftStart, shiftStop, lunchStart, lunchStop;
+    private LocalTime shiftstart, shiftstop, lunchstart, lunchstop;
     //HashMap<String, String> map = new HashMap<String, String>();
     //CONSTRUCTOR
     public Shift(HashMap<String, String> map){
-        this.Id = Integer.parseInt(map.get("id"));
+        this.id = Integer.parseInt(map.get("id"));
         this.description = map.get("description");
-        this.RoundInterval = Integer.parseInt(map.get("roundinterval"));
-        this.GracePeriod = Integer.parseInt(map.get("graceperiod"));
-        this.shiftStart = LocalTime.parse(map.get("shiftstart"));
-        this.shiftStop = LocalTime.parse(map.get("shiftstop"));
-        this.lunchStart = LocalTime.parse(map.get("lunchstart"));
-        this.lunchStop = LocalTime.parse(map.get("lunchstop"));
-        this.lunchThresh = Integer.parseInt(map.get("lunchthreshold"));
-        this.Dock = Integer.parseInt(map.get("dockpenalty"));
-        this.LunchDuration = (int)Duration.between(this.lunchStart, this.lunchStop).toMinutes();
-        this.ShiftDuration = (int)Duration.between(this.shiftStart, this.shiftStop).toMinutes();
+        this.roundinterval = Integer.parseInt(map.get("roundinterval"));
+        this.graceperiod = Integer.parseInt(map.get("graceperiod"));
+        this.shiftstart = LocalTime.parse(map.get("shiftstart"));
+        this.shiftstop = LocalTime.parse(map.get("shiftstop"));
+        this.lunchstart = LocalTime.parse(map.get("lunchstart"));
+        this.lunchstop = LocalTime.parse(map.get("lunchstop"));
+        this.lunchthresh = Integer.parseInt(map.get("lunchthreshold"));
+        this.dock = Integer.parseInt(map.get("dockpenalty"));
+        this.lunchduration = (int)Duration.between(this.lunchstart, this.lunchstop).toMinutes();
+        this.shiftduration = (int)Duration.between(this.shiftstart, this.shiftstop).toMinutes();
     }
 
-    public int getId() {
-        return Id;
+    public int getid() {
+        return id;
     }
 
-    public int getRoundInterval() {
-        return RoundInterval;
+    public int getroundinterval() {
+        return roundinterval;
     }
 
-    public int getGracePeriod() {
-        return GracePeriod;
+    public int getgraceperiod() {
+        return graceperiod;
     }
 
-    public int getDock() {
-        return Dock;
+    public int getdock() {
+        return dock;
     }
 
-    public LocalTime getLunchStart() {
-        return lunchStart;
+    public LocalTime getlunchstart() {
+        return lunchstart;
     }
 
-    public int getLunchThresh() {
-        return lunchThresh;
+    public int getlunchthresh() {
+        return lunchthresh;
     }
 
-    public LocalTime getLunchStop() {
-        return lunchStop;
+    public LocalTime getlunchstop() {
+        return lunchstop;
     }
 
-    public String getDescription() {
+    public String getdescription() {
         return description;
     }
 
-    public LocalTime getShiftStart() {
-        return shiftStart;
+    public LocalTime getshiftstart() {
+        return shiftstart;
     }
 
-    public LocalTime getShiftStop() {
-        return shiftStop;
+    public LocalTime getshiftstop() {
+        return shiftstop;
     }
 
-    public int getLunchDuration() {
-        return LunchDuration;
+    public int getlunchduration() {
+        return lunchduration;
     }
 
-    public int getShiftDuration() {
-        return ShiftDuration;
+    public int getshiftduration() {
+        return shiftduration;
     }
 
     @Override
      public String toString(){
         String results = String.format("%s: %s - %s (%d minutes); Lunch: %s - %s (%d minutes)",
-                getDescription(), getShiftStart().toString(), getShiftStop().toString(), getShiftDuration(),
-                getLunchStart(), getLunchStop(), getLunchDuration());
+                getdescription(), getshiftstart().toString(), getshiftstop().toString(), getshiftduration(),
+                getlunchstart(), getlunchstop(), getlunchduration());
 
         return results;
     }
