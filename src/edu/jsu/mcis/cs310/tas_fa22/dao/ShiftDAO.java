@@ -71,89 +71,45 @@ public class ShiftDAO {
     }
     public Shift find(Badge badge) {
         Shift shift = null;
-        PreparedStatement ps1 = null;
-        PreparedStatement ps2 = null;
-        ResultSet rs1 = null;
-        ResultSet rs2 = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
 
             Connection conn = daoFactory.getConnection();
 
             if (conn.isValid(0)) {
-                ps1 = conn.prepareStatement(QUERY_BADGE);
-                ps1.setString(1, badge.getId());
+                ps = conn.prepareStatement(QUERY_BADGE);
+                ps.setString(1, badge.getId());
 
-                boolean hasResults1 = ps1.execute();
+                boolean hasResults = ps.execute();
 
-                if (hasResults1) {
-                    rs1 = ps1.getResultSet();
+                if (hasResults) {
+                    rs = ps.getResultSet();
 
-                    while (rs1.next()) {
-                        int shiftid = rs1.getInt("shiftid");
+                    while (rs.next()) {
+                        int shiftid = rs.getInt("shiftid");
 
-                        ps2 = conn.prepareStatement(QUERY_ID);
-                        ps2.setInt(1, shiftid);
-
-                        boolean hasResults2 = ps2.execute();
-
-                        if (hasResults2) {
-                            rs2 = ps2.getResultSet();
-                            while (rs2.next()) {
-                                map.put("id", rs2.getString("id"));
-                                map.put("description", rs2.getString("description"));
-                                map.put("shiftstart", rs2.getString("shiftstart"));
-                                map.put("shiftstop", rs2.getString("shiftstop"));
-                                map.put("roundinterval", rs2.getString("roundinterval"));
-                                map.put("graceperiod", rs2.getString("graceperiod"));
-                                map.put("dockpenalty", rs2.getString("dockpenalty"));
-                                map.put("lunchstart", rs2.getString("lunchstart"));
-                                map.put("lunchstop", rs2.getString("lunchstop"));
-                                map.put("lunchthreshold", rs2.getString("lunchthreshold"));
-
-                                shift = new Shift(map);
-                            }
-                        }
+                        return find(shiftid);
                     }
 
                 }
-
-
-
-
-
-
-
             }
         }catch(SQLException e){
             throw new DAOException(e.getMessage());
         }
         finally {
 
-            if (rs1 != null) {
+            if (rs != null) {
                 try {
-                    rs1.close();
+                    rs.close();
                 } catch (SQLException e) {
                     throw new DAOException(e.getMessage());
                 }
             }
-            if (ps1 != null) {
+            if (ps != null) {
                 try {
-                    ps1.close();
-                } catch (SQLException e) {
-                    throw new DAOException(e.getMessage());
-                }
-            }
-            if (rs2 != null) {
-                try {
-                    rs2.close();
-                } catch (SQLException e) {
-                    throw new DAOException(e.getMessage());
-                }
-            }
-            if (ps2 != null) {
-                try {
-                    ps2.close();
+                    ps.close();
                 } catch (SQLException e) {
                     throw new DAOException(e.getMessage());
                 }

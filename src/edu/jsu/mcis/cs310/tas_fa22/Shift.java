@@ -6,11 +6,11 @@ import java.time.*;
 public class Shift {
 
     //private final int lunchduration, shiftduration;
-    private int graceperiod, roundinterval, dock, id, lunchthresh, lunchduration,
+    private final int graceperiod, roundinterval, dock, id, lunchthresh, lunchduration,
     shiftduration;
 
-    private String description;
-    private LocalTime shiftstart, shiftstop, lunchstart, lunchstop;
+    private final String description;
+    private final LocalTime shiftstart, shiftstop, lunchstart, lunchstop;
     //HashMap<String, String> map = new HashMap<String, String>();
     //CONSTRUCTOR
     public Shift(HashMap<String, String> map){
