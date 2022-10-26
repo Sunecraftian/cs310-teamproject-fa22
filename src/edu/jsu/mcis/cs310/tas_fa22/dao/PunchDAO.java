@@ -20,6 +20,7 @@ public class PunchDAO {
     private static final String QUERY_FIND   = "SELECT * FROM event WHERE id = ?";
     private static final String QUERY_CREATE = "INSERT INTO event VALUES (?, ?, ?, ?, ?)";
     private static final String QUERY_LIST = "SELECT * FROM event WHERE badgeid = ?";
+
     private final DAOFactory daoFactory;
 
     PunchDAO(DAOFactory daoFactory) {
@@ -87,21 +88,30 @@ public class PunchDAO {
         PreparedStatement ps = null;
         int update = 0;
 
-        try {
+            try {
 
-            Connection conn = daoFactory.getConnection();
+                EmployeeDAO edao = new EmployeeDAO(daoFactory);
 
-            if (conn.isValid(0)) {
-                ps = conn.prepareStatement(QUERY_CREATE);
-                ps.setInt(1, punch.getId()); // id
-                ps.setInt(2, punch.getTerminalid()); // terminalid
-                ps.setString(3, punch.getBadge().getId()); // badgeid
-                ps.setString(4, punch.getOriginaltimestamp().toString()); // timestamp
-                ps.setInt(5, punch.getPunchtype().ordinal()); // eventtype
+                int pTermid = punch.getTerminalid();
+                int dTermid = edao.find(punch.getBadge()).getDepartment().getTerminal_id();
 
-                update = ps.executeUpdate();
-            }
-        } catch (SQLException e) {
+                if(pTermid == dTermid) {
+
+                    Connection conn = daoFactory.getConnection();
+
+
+                    if (conn.isValid(0)) {
+                        ps = conn.prepareStatement(QUERY_CREATE);
+                        ps.setInt(1, punch.getId()); // id
+                        ps.setInt(2, punch.getTerminalid()); // terminalid
+                        ps.setString(3, punch.getBadge().getId()); // badgeid
+                        ps.setString(4, punch.getOriginaltimestamp().toString()); // timestamp
+                        ps.setInt(5, punch.getPunchtype().ordinal()); // eventtype
+
+                        update = ps.executeUpdate();
+                        }
+                    }
+            } catch (SQLException e) {
             throw new DAOException(e.getMessage());
         } finally {
             if (ps != null) {
