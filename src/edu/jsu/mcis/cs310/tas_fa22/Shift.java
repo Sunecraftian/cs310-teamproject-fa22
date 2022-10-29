@@ -5,13 +5,12 @@ import java.util.HashMap;
 import java.time.*;
 public class Shift {
 
-    //private final int lunchduration, shiftduration;
     private final int graceperiod, roundinterval, dock, id, lunchthresh, lunchduration,
     shiftduration;
 
     private final String description;
     private final LocalTime shiftstart, shiftstop, lunchstart, lunchstop;
-    //HashMap<String, String> map = new HashMap<String, String>();
+
     //CONSTRUCTOR
     public Shift(HashMap<String, String> map){
         this.id = Integer.parseInt(map.get("id"));

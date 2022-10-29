@@ -17,8 +17,8 @@ import java.util.Comparator;
 
 public class PunchDAO {
 
-    private static final String QUERY_FIND   = "SELECT * FROM event WHERE id = ?";
-    private static final String QUERY_CREATE = "INSERT INTO event VALUES (?, ?, ?, ?, ?)";
+    private static final String QUERY_FIND = "SELECT * FROM event WHERE id = ?";
+    private static final String QUERY_CREATE = "INSERT INTO event (terminalid, badgeid, timestamp, eventtypeid) VALUES (?, ?, ?, ?)";
     private static final String QUERY_LIST = "SELECT * FROM event WHERE badgeid = ?";
 
     private final DAOFactory daoFactory;
@@ -86,44 +86,51 @@ public class PunchDAO {
     public int create(Punch punch) {
 
         PreparedStatement ps = null;
+        ResultSet keys;
+        int id = 0;
         int update = 0;
 
+        EmployeeDAO employeeDAO = new EmployeeDAO(daoFactory);
+
+        int punchTerminalid = punch.getTerminalid();
+        int departmentTerminalid = employeeDAO.find(punch.getBadge()).getDepartment().getTerminal_id();
+
+        if (punchTerminalid == departmentTerminalid) {
             try {
 
-                EmployeeDAO edao = new EmployeeDAO(daoFactory);
 
-                int pTermid = punch.getTerminalid();
-                int dTermid = edao.find(punch.getBadge()).getDepartment().getTerminal_id();
+                Connection conn = daoFactory.getConnection();
 
-                if(pTermid == dTermid) {
+                if (conn.isValid(0)) {
+                    ps = conn.prepareStatement(QUERY_CREATE, PreparedStatement.RETURN_GENERATED_KEYS);
+                    ps.setInt(1, punch.getTerminalid()); // terminalid
+                    ps.setString(2, punch.getBadge().getId()); // badgeid
+                    ps.setString(3, punch.getOriginaltimestamp().toString()); // timestamp
+                    ps.setInt(4, punch.getPunchtype().ordinal()); // eventtype
 
-                    Connection conn = daoFactory.getConnection();
+                    update = ps.executeUpdate();
 
-
-                    if (conn.isValid(0)) {
-                        ps = conn.prepareStatement(QUERY_CREATE);
-                        ps.setInt(1, punch.getId()); // id
-                        ps.setInt(2, punch.getTerminalid()); // terminalid
-                        ps.setString(3, punch.getBadge().getId()); // badgeid
-                        ps.setString(4, punch.getOriginaltimestamp().toString()); // timestamp
-                        ps.setInt(5, punch.getPunchtype().ordinal()); // eventtype
-
-                        update = ps.executeUpdate();
+                    if (update == 1) {
+                        keys = ps.getGeneratedKeys();
+                        if (keys.next()) {
+                            id = keys.getInt(1);
                         }
                     }
+                }
             } catch (SQLException e) {
-            throw new DAOException(e.getMessage());
-        } finally {
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                    throw new DAOException(e.getMessage());
+                throw new DAOException(e.getMessage());
+            } finally {
+                if (ps != null) {
+                    try {
+                        ps.close();
+                    } catch (SQLException e) {
+                        throw new DAOException(e.getMessage());
+                    }
                 }
             }
         }
 
-        return update;
+        return id;
     }
 
     public ArrayList<Punch> list(Badge badge, LocalDate localDate) {
@@ -136,7 +143,7 @@ public class PunchDAO {
 
             Connection conn = daoFactory.getConnection();
 
-            if(conn.isValid(0)) {
+            if (conn.isValid(0)) {
                 ps = conn.prepareStatement(QUERY_LIST);
                 ps.setString(1, badge.getId());
 
@@ -145,7 +152,7 @@ public class PunchDAO {
                 if (hasresults) {
                     rs = ps.getResultSet();
 
-                    while(rs.next()) {
+                    while (rs.next()) {
                         LocalDateTime originaltimestamp = LocalDateTime.parse(rs.getString("timestamp"), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                         LocalDate date = originaltimestamp.toLocalDate();
 
