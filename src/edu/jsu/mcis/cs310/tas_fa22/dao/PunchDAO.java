@@ -1,3 +1,4 @@
+
 package edu.jsu.mcis.cs310.tas_fa22.dao;
 
 import edu.jsu.mcis.cs310.tas_fa22.Badge;
@@ -12,13 +13,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 public class PunchDAO {
 
     private static final String QUERY_FIND = "SELECT * FROM event WHERE id = ?";
-    private static final String QUERY_CREATE = "INSERT INTO event (terminalid, badgeid, timestamp, eventtypeid) VALUES (?, ?, ?, ?)";
+    private static final String QUERY_CREATE = "INSERT INTO event VALUES (?, ?, ?, ?, ?)";
     private static final String QUERY_LIST = "SELECT * FROM event WHERE badgeid = ?";
 
     private final DAOFactory daoFactory;
@@ -86,51 +87,44 @@ public class PunchDAO {
     public int create(Punch punch) {
 
         PreparedStatement ps = null;
-        ResultSet keys;
-        int id = 0;
         int update = 0;
 
-        EmployeeDAO employeeDAO = new EmployeeDAO(daoFactory);
+        try {
 
-        int punchTerminalid = punch.getTerminalid();
-        int departmentTerminalid = employeeDAO.find(punch.getBadge()).getDepartment().getTerminal_id();
+            EmployeeDAO edao = new EmployeeDAO(daoFactory);
 
-        if (punchTerminalid == departmentTerminalid) {
-            try {
+            int pTermid = punch.getTerminalid();
+            int dTermid = edao.find(punch.getBadge()).getDepartment().getTerminal_id();
 
+            if (pTermid == dTermid) {
 
                 Connection conn = daoFactory.getConnection();
 
+
                 if (conn.isValid(0)) {
-                    ps = conn.prepareStatement(QUERY_CREATE, PreparedStatement.RETURN_GENERATED_KEYS);
-                    ps.setInt(1, punch.getTerminalid()); // terminalid
-                    ps.setString(2, punch.getBadge().getId()); // badgeid
-                    ps.setString(3, punch.getOriginaltimestamp().toString()); // timestamp
-                    ps.setInt(4, punch.getPunchtype().ordinal()); // eventtype
+                    ps = conn.prepareStatement(QUERY_CREATE);
+                    ps.setInt(1, punch.getId()); // id
+                    ps.setInt(2, punch.getTerminalid()); // terminalid
+                    ps.setString(3, punch.getBadge().getId()); // badgeid
+                    ps.setString(4, punch.getOriginaltimestamp().toString()); // timestamp
+                    ps.setInt(5, punch.getPunchtype().ordinal()); // eventtype
 
                     update = ps.executeUpdate();
-
-                    if (update == 1) {
-                        keys = ps.getGeneratedKeys();
-                        if (keys.next()) {
-                            id = keys.getInt(1);
-                        }
-                    }
                 }
-            } catch (SQLException e) {
-                throw new DAOException(e.getMessage());
-            } finally {
-                if (ps != null) {
-                    try {
-                        ps.close();
-                    } catch (SQLException e) {
-                        throw new DAOException(e.getMessage());
-                    }
+            }
+        } catch (SQLException e) {
+            throw new DAOException(e.getMessage());
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    throw new DAOException(e.getMessage());
                 }
             }
         }
 
-        return id;
+        return update;
     }
 
     public ArrayList<Punch> list(Badge badge, LocalDate localDate) {
@@ -187,6 +181,20 @@ public class PunchDAO {
                 }
             }
         }
+        return punches;
+    }
+
+    public ArrayList<Punch> list(Badge badge, LocalDate begin, LocalDate end) {
+        ArrayList<Punch> punches = new ArrayList<>();
+
+        PunchDAO punchDAO = new PunchDAO(daoFactory);
+
+        List<LocalDate> listOfDates = begin.datesUntil(end.plusDays(1)).toList();
+
+        for (LocalDate localDate : listOfDates) {
+            punches.addAll(punchDAO.list(badge, localDate));
+        }
+
         return punches;
     }
 }
