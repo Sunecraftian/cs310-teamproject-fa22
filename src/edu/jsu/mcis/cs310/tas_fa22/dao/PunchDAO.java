@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 public class PunchDAO {
 
@@ -186,6 +187,20 @@ public class PunchDAO {
                 }
             }
         }
+        return punches;
+    }
+
+    public ArrayList<Punch> list(Badge badge, LocalDate begin, LocalDate end) {
+        ArrayList<Punch> punches = new ArrayList<>();
+
+        PunchDAO punchDAO = new PunchDAO(daoFactory);
+
+        List<LocalDate> listOfDates = begin.datesUntil(end.plusDays(1)).toList();
+
+        for (LocalDate localDate : listOfDates) {
+            punches.addAll(punchDAO.list(badge, localDate));
+        }
+
         return punches;
     }
 }
