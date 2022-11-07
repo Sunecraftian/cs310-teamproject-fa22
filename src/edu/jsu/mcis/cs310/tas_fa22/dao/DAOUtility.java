@@ -1,47 +1,34 @@
 package edu.jsu.mcis.cs310.tas_fa22.dao;
 
-import edu.jsu.mcis.cs310.tas_fa22.*;
-import java.time.*;
-import java.util.*;
-import java.time.temporal.ChronoUnit;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+
+import edu.jsu.mcis.cs310.tas_fa22.Punch;
 import org.json.simple.*;
 
-/**
- * 
- * Utility class for DAOs.  This is a final, non-constructable class containing
- * common DAO logic and other repeated and/or standardized code, refactored into
- * individual static methods.
- * 
- */
 public final class DAOUtility {
-   /* private static Object ArrayList;
-    private static String punchData;
-    Punch punch;
-
-    Hashmap<>
-    public static int calculateTotalMinutes(ArrayList<Punch> dailypunchlist, Shift shift) {
-
-    }
 
 
+    public static String getPunchListAsJSON(ArrayList<Punch> dailypunchlist) {
+        String jsonString;
 
-    public static String getPunchListAsJSON(ArrayList<Punch> dailypunchlist){
-        /* Create ArrayList Object */
-        ArrayList<HashMap<string, string = "" >> jsonData;
+        JSONArray json = new JSONArray();
 
-        /* Create HashMap Object (one for every Punch!) */
-        HashMap<string, string = "" > punchData = new HashMap<>();
+        for (Punch punch : dailypunchlist) {
+            JSONObject object = new JSONObject();
 
-        /* Add Punch Data to HashMap */
-        punchData.put("id", String.valueOf(punch.getId));
-        punchData.put("badgeid", String.valueOf(punch.getBadgeid));
-        punchData.put("terminalid", String.valueOf(punch.getTerminalid));
-        /* ... continue in the same way with the remaining Punch data ...*/
-        
-        /* Append HashMap to ArrayList */
-        jsonData.add(punchData);
+            object.put("originaltimestamp", punch.getOriginaltimestamp().format(DateTimeFormatter.ofPattern("E MM/dd/yyyy HH:mm:ss")).toUpperCase());
+            object.put("badgeid", punch.getBadge().getId());
+            object.put("adjustedtimestamp", punch.getAdjustedtimestamp().format(DateTimeFormatter.ofPattern("E MM/dd/yyyy HH:mm:ss")).toUpperCase());
+            object.put("adjustmenttype", punch.getAdjustmentType().toString());
+            object.put("terminalid", String.valueOf(punch.getTerminalid()));
+            object.put("id", String.valueOf(punch.getId()));
+            object.put("punchtype", punch.getPunchtype().toString());
 
-        String json = JSONValue.toJSONString(jsonData);
+            json.add(object);
+        }
+
+        jsonString = JSONValue.toJSONString(json);
+        return jsonString;
     }
 }
