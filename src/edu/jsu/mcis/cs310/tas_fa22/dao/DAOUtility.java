@@ -1,29 +1,46 @@
 package edu.jsu.mcis.cs310.tas_fa22.dao;
 
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-
 import edu.jsu.mcis.cs310.tas_fa22.Punch;
 import edu.jsu.mcis.cs310.tas_fa22.PunchAdjustmentType;
 import edu.jsu.mcis.cs310.tas_fa22.Shift;
-import org.json.simple.*;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 
 public final class DAOUtility {
 
     public static int calculateTotalMinutes(ArrayList<Punch> dailypunchlist, Shift shift) {
         int minutes = 0;
 
-        for (int i = 0; i < dailypunchlist.size(); i += 2) {
-            Punch punch1 = dailypunchlist.get(i);
-            Punch punch2 = dailypunchlist.get(i+1);
+        try {
+            boolean hadLunch = false;
+            for (int i = 0; i < dailypunchlist.size(); i += 2) {
+                Punch punch1 = dailypunchlist.get(i);
+                Punch punch2 = dailypunchlist.get(i + 1);
 
-            LocalTime time1 = punch1.getAdjustedtimestamp().toLocalTime();
-            LocalTime time2 = punch2.getAdjustedtimestamp().toLocalTime();
+                LocalTime time1 = punch1.getAdjustedtimestamp().toLocalTime();
+                LocalTime time2 = punch2.getAdjustedtimestamp().toLocalTime();
 
-            minutes += (int) time1.until(time2, ChronoUnit.MINUTES); // Makes Shift1Weekday, Shift1Weekend
+                if (punch1.getAdjustmentType() == PunchAdjustmentType.LUNCH_START ||
+                    punch2.getAdjustmentType() == PunchAdjustmentType.LUNCH_START ||
+                    punch1.getAdjustmentType() == PunchAdjustmentType.LUNCH_STOP ||
+                    punch2.getAdjustmentType() == PunchAdjustmentType.LUNCH_STOP) hadLunch = true;
+
+                minutes += (int) time1.until(time2, ChronoUnit.MINUTES);
+            }
+
+            if (!hadLunch && minutes > shift.getlunchthresh()) {
+                minutes -= shift.getlunchduration();
+            }
+
+        } catch (IndexOutOfBoundsException e) {
+            return minutes;
         }
-
-        minutes -= shift.getlunchduration(); // Makes Shift2Weekday work
 
         return minutes;
     }
