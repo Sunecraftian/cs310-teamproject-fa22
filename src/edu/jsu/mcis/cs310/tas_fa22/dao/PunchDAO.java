@@ -97,8 +97,6 @@ public class PunchDAO {
 
         if (punchTerminalid == departmentTerminalid) {
             try {
-
-
                 Connection conn = daoFactory.getConnection();
 
                 if (conn.isValid(0)) {

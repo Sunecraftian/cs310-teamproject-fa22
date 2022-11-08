@@ -25,7 +25,6 @@ public final class DAOFactory {
         } catch (SQLException e) {
             throw new DAOException(e.getMessage());
         }
-
     }
 
     Connection getConnection() {
@@ -39,9 +38,12 @@ public final class DAOFactory {
         return new ShiftDAO(this);
     }
 
-    public PunchDAO getPunchDAO() { return new PunchDAO(this); };
+    public PunchDAO getPunchDAO() { return new PunchDAO(this); }
 
-    public DepartmentDAO getDepartmentDAO() { return new DepartmentDAO(this);}
+    public DepartmentDAO getDepartmentDAO() { return new DepartmentDAO(this); }
 
     public EmployeeDAO getEmployeeDAO() { return new EmployeeDAO(this); }
+
+    public AbsenteeismDAO getAbsenteeismDAO() { return new AbsenteeismDAO(this); }
+
 }

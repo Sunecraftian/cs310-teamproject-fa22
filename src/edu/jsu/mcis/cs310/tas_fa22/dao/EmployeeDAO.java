@@ -17,12 +17,7 @@ public class EmployeeDAO {
 
     private final DAOFactory daoFactory;
 
-    EmployeeDAO(DAOFactory daoFactory) {
-
-        this.daoFactory = daoFactory;
-
-
-    }
+    public EmployeeDAO(DAOFactory daoFactory) { this.daoFactory = daoFactory; }
 
     public Employee find(int id) {
 

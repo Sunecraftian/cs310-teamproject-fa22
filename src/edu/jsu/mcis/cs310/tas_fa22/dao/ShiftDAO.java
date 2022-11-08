@@ -6,6 +6,7 @@ import edu.jsu.mcis.cs310.tas_fa22.*;
 import java.sql.PreparedStatement;
 import java.util.HashMap;
 import java.sql.*;
+
 public class ShiftDAO {
     private static final String QUERY_ID = "SELECT * FROM shift WHERE id = ?";
     private static final String QUERY_BADGE = "SELECT * FROM  employee WHERE badgeid = ?";
@@ -47,10 +48,9 @@ public class ShiftDAO {
                 }
 
             }
-            }catch(SQLException e){
+        } catch (SQLException e) {
             throw new DAOException(e.getMessage());
-        }
-        finally {
+        } finally {
 
             if (rs != null) {
                 try {
@@ -69,6 +69,7 @@ public class ShiftDAO {
         }
         return shift;
     }
+
     public Shift find(Badge badge) {
         Shift shift = null;
         PreparedStatement ps = null;
@@ -92,14 +93,11 @@ public class ShiftDAO {
 
                         return find(shiftid);
                     }
-
                 }
             }
-        }catch(SQLException e){
+        } catch (SQLException e) {
             throw new DAOException(e.getMessage());
-        }
-        finally {
-
+        } finally {
             if (rs != null) {
                 try {
                     rs.close();
