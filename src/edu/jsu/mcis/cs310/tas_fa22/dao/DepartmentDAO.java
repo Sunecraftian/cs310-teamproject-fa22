@@ -40,10 +40,23 @@ public class DepartmentDAO {
                }
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DAOException(e.getMessage());
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    throw new DAOException(e.getMessage());
+                }
+            }
+            if (ps != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    throw  new DAOException(e.getMessage());
+                }
+            }
         }
         return department;
-
     }
-
 }

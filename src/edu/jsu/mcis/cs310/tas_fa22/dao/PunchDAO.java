@@ -84,7 +84,6 @@ public class PunchDAO {
 
     // Insert Punch Into Database \\
     public int create(Punch punch) {
-
         PreparedStatement ps = null;
         ResultSet keys;
         int id = 0;
@@ -127,7 +126,6 @@ public class PunchDAO {
                 }
             }
         }
-
         return id;
     }
 
@@ -138,7 +136,6 @@ public class PunchDAO {
         ResultSet rs = null;
 
         try {
-
             Connection conn = daoFactory.getConnection();
 
             if (conn.isValid(0)) {

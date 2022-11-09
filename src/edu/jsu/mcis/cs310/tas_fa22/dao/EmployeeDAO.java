@@ -2,7 +2,6 @@ package edu.jsu.mcis.cs310.tas_fa22.dao;
 
 import edu.jsu.mcis.cs310.tas_fa22.*;
 
-import java.beans.beancontext.BeanContext;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,14 +19,11 @@ public class EmployeeDAO {
     public EmployeeDAO(DAOFactory daoFactory) { this.daoFactory = daoFactory; }
 
     public Employee find(int id) {
-
         Employee employee = null;
-
         PreparedStatement ps = null;
         ResultSet rs = null;
 
         try {
-
             Connection conn = daoFactory.getConnection();
 
             if (conn.isValid(0)) {
@@ -60,7 +56,6 @@ public class EmployeeDAO {
                     }
                 }
             }
-
         } catch (SQLException e) {
             throw new DAOException(e.getMessage());
         } finally {
@@ -78,20 +73,16 @@ public class EmployeeDAO {
                     throw  new DAOException(e.getMessage());
                 }
             }
-
-
         }
         return employee;
     }
 
     public Employee find(Badge badge) {
         Employee employee = null;
-
         PreparedStatement ps = null;
         ResultSet rs = null;
 
         try {
-
             Connection conn = daoFactory.getConnection();
 
             if (conn.isValid(0)) {
@@ -125,7 +116,6 @@ public class EmployeeDAO {
                     }
                 }
             }
-
         } catch (SQLException e) {
             throw new DAOException(e.getMessage());
         } finally {
@@ -143,8 +133,6 @@ public class EmployeeDAO {
                     throw  new DAOException(e.getMessage());
                 }
             }
-
-
         }
         return employee;
     }

@@ -1,6 +1,7 @@
 package edu.jsu.mcis.cs310.tas_fa22.dao;
 
 import edu.jsu.mcis.cs310.tas_fa22.*;
+
 import java.sql.*;
 
 public class BadgeDAO {
@@ -9,10 +10,7 @@ public class BadgeDAO {
 
     private final DAOFactory daoFactory;
 
-    BadgeDAO(DAOFactory daoFactory) {
-
-        this.daoFactory = daoFactory;
-    }
+    BadgeDAO(DAOFactory daoFactory) { this.daoFactory = daoFactory; }
 
     public Badge find(String id) {
 
@@ -22,7 +20,6 @@ public class BadgeDAO {
         ResultSet rs = null;
 
         try {
-
             Connection conn = daoFactory.getConnection();
 
             if (conn.isValid(0)) {
@@ -42,17 +39,11 @@ public class BadgeDAO {
                         badge = new Badge(id, description);
 
                     }
-
                 }
-
             }
-
         } catch (SQLException e) {
-
             throw new DAOException(e.getMessage());
-
         } finally {
-
             if (rs != null) {
                 try {
                     rs.close();
@@ -67,11 +58,7 @@ public class BadgeDAO {
                     throw new DAOException(e.getMessage());
                 }
             }
-
         }
-
         return badge;
-
     }
-
 }
