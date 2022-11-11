@@ -1,6 +1,5 @@
 package edu.jsu.mcis.cs310.tas_fa22;
 
-//import java.time.LocalTime;
 import java.util.HashMap;
 import java.time.*;
 public class Shift {
@@ -71,9 +70,7 @@ public class Shift {
         return lunchduration;
     }
 
-    public int getshiftduration() {
-        return shiftduration;
-    }
+    public int getshiftduration() { return shiftduration; }
 
     @Override
      public String toString(){
