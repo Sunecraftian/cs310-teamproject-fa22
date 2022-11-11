@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Locale;
 
 @SuppressWarnings("ALL")
 public class Punch {
@@ -83,7 +82,7 @@ public class Punch {
                 this.adjustmentType = PunchAdjustmentType.SHIFT_START;
                 return;
             } else if (inDock) {
-                this.adjustedtimestamp = this.originaltimestamp.with(dockAfterStart);
+                this.adjustedtimestamp = this.getOriginaltimestamp().with(dockAfterStart);
                 this.adjustmentType = PunchAdjustmentType.SHIFT_DOCK;
                 return;
             } else if (outLunch) {
@@ -95,7 +94,7 @@ public class Punch {
                 this.adjustmentType = PunchAdjustmentType.LUNCH_STOP;
                 return;
             } else if (outDock) {
-                this.adjustedtimestamp = this.originaltimestamp.with(dockBeforeEnd);
+                this.adjustedtimestamp = this.getOriginaltimestamp().with(dockBeforeEnd);
                 this.adjustmentType = PunchAdjustmentType.SHIFT_DOCK;
                 return;
             } else if (outGrace || outInterval) {
@@ -106,15 +105,18 @@ public class Punch {
         }
         int sec = this.getOriginaltimestamp().getSecond();
         int min = (sec >= 30) ? this.getOriginaltimestamp().plusMinutes(1).getMinute() : this.getOriginaltimestamp().getMinute();
+        if (sec >= 30) this.adjustedtimestamp = this.getOriginaltimestamp().plusMinutes(1);
+
+
 
         if (min % 15 == 0) {
-            this.adjustedtimestamp = this.getOriginaltimestamp().truncatedTo(ChronoUnit.MINUTES);
+            this.adjustedtimestamp = this.adjustedtimestamp.truncatedTo(ChronoUnit.MINUTES);
             this.adjustmentType = PunchAdjustmentType.NONE;
             return;
         } else if (min % 15 < 8) {
-            this.adjustedtimestamp = this.getOriginaltimestamp().truncatedTo(ChronoUnit.MINUTES).minusMinutes(min % 15);
+            this.adjustedtimestamp = this.adjustedtimestamp.truncatedTo(ChronoUnit.MINUTES).minusMinutes(min % 15);
         } else if (min % 15 >= 8) {
-            this.adjustedtimestamp = this.getOriginaltimestamp().truncatedTo(ChronoUnit.MINUTES).plusMinutes(16 - (min % 15));
+            this.adjustedtimestamp = this.adjustedtimestamp.truncatedTo(ChronoUnit.MINUTES).plusMinutes(15 - (min % 15));
         }
         this.adjustmentType = PunchAdjustmentType.INTERVAL_ROUND;
         return;
