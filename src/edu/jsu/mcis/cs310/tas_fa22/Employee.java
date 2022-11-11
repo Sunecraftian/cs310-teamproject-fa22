@@ -22,7 +22,6 @@ public class Employee {
         this.department = department;
         this.shift = shift;
         this.employeeType = employeeType;
-
     }
 
     public Integer getId() {
@@ -61,10 +60,8 @@ public class Employee {
 
     @Override
     public String toString() {
-        String results = String.format("ID #%d: %s, %s %s (#%s), Type: %s, Department: %s, Active: %s",
+        return String.format("ID #%d: %s, %s %s (#%s), Type: %s, Department: %s, Active: %s",
                 getId(), getLastname(), getFirstname(), getMiddlename(),
                 getBadge().getId(), getEmployeeType().toString() , getDepartment().getDescription(), getActive().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
-
-        return results;
     }
 }

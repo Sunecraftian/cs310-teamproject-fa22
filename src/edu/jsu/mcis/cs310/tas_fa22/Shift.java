@@ -74,11 +74,9 @@ public class Shift {
 
     @Override
      public String toString(){
-        String results = String.format("%s: %s - %s (%d minutes); Lunch: %s - %s (%d minutes)",
+        return String.format("%s: %s - %s (%d minutes); Lunch: %s - %s (%d minutes)",
                 getdescription(), getshiftstart().toString(), getshiftstop().toString(), getshiftduration(),
                 getlunchstart(), getlunchstop(), getlunchduration());
-
-        return results;
     }
 }
 

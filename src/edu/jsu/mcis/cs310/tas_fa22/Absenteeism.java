@@ -32,9 +32,7 @@ public class Absenteeism {
 
     @Override
     public String toString() {
-        String result = String.format("#%s (Pay Period Starting %s): %.2f%%",
+        return String.format("#%s (Pay Period Starting %s): %.2f%%",
                 employee.getBadge().getId(), payperiod.format(DateTimeFormatter.ofPattern("MM-dd-yyyy")), percentage*100 );
-
-        return result;
     }
 }

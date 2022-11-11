@@ -5,7 +5,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
-@SuppressWarnings("ALL")
+
 public class Punch {
 
     private final Integer id, terminalid;
@@ -26,7 +26,7 @@ public class Punch {
 
     // Existing Punch \\
     public Punch(int id, int terminalid, Badge badge, LocalDateTime originaltimestamp, EventType punchtype) {
-        this.id = Integer.valueOf(id);
+        this.id = id;
         this.terminalid = terminalid;
         this.badge = badge;
         this.punchtype = punchtype;
@@ -52,7 +52,7 @@ public class Punch {
         LocalTime shiftEnd = s.getshiftstop();
         LocalTime intervalAfterShift = s.getshiftstop().plus(s.getroundinterval(), ChronoUnit.MINUTES);
 
-        boolean isWeekend = (dayOfWeek == 6 || dayOfWeek == 7) ? true : false;  // Weekend Punch
+        boolean isWeekend = dayOfWeek == 6 || dayOfWeek == 7;  // Weekend Punch
         boolean inInterval = false, inGrace = false, inDock = false, inLunch = false;    // Clock In Punches
         boolean outInterval = false, outGrace = false, outDock = false, outLunch = false;   // Clock Out Punches
 
@@ -119,19 +119,16 @@ public class Punch {
             this.adjustedtimestamp = this.adjustedtimestamp.truncatedTo(ChronoUnit.MINUTES).plusMinutes(15 - (min % 15));
         }
         this.adjustmentType = PunchAdjustmentType.INTERVAL_ROUND;
-        return;
     }
 
     public String printOriginal() {
-        String result = String.format("#%s %s: %s", getBadge().getId(), getPunchtype().toString(),
+        return String.format("#%s %s: %s", getBadge().getId(), getPunchtype().toString(),
                 getOriginaltimestamp().format(DateTimeFormatter.ofPattern("E MM/dd/yyyy HH:mm:ss")).toUpperCase());
-        return result;
     }
 
     public String printAdjusted() {
-        String result = String.format("#%s %s: %s (%s)", getBadge().getId(), getPunchtype().toString(),
+        return String.format("#%s %s: %s (%s)", getBadge().getId(), getPunchtype().toString(),
                 getAdjustedtimestamp().format(DateTimeFormatter.ofPattern("E MM/dd/yyyy HH:mm:ss")).toUpperCase(), getAdjustmentType());
-        return result;
     }
 
     public Integer getId() {
@@ -151,7 +148,7 @@ public class Punch {
     }
 
     public int getTerminalid() {
-        return terminalid.intValue();
+        return terminalid;
     }
 
     public EventType getPunchtype() {

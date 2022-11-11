@@ -1,8 +1,8 @@
 package edu.jsu.mcis.cs310.tas_fa22;
 
 public class Department {
-    private int id, terminal_id;
-    private String description;
+    private final int id, terminal_id;
+    private final String description;
 
 
 
@@ -28,8 +28,7 @@ public class Department {
 
     @Override
     public String toString() {
-        String results = "#"+ getId() + " ("+getDescription()+"), "+ "Terminal ID: "+ getTerminal_id();
-        return results;
+        return String.format("#%s (%s), Terminal ID: %d", getId(), getDescription(), getTerminal_id());
     }
 
 }
