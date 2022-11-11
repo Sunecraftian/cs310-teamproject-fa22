@@ -12,9 +12,11 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
+@SuppressWarnings("unchecked")
 public final class DAOUtility {
 
     public static int calculateTotalMinutes(ArrayList<Punch> dailypunchlist, Shift shift) {
+        int m;
         int minutes = 0;
 
         try {
@@ -31,14 +33,18 @@ public final class DAOUtility {
                     punch1.getAdjustmentType() == PunchAdjustmentType.LUNCH_STOP ||
                     punch2.getAdjustmentType() == PunchAdjustmentType.LUNCH_STOP) hadLunch = true;
 
-                minutes += (int) time1.until(time2, ChronoUnit.MINUTES);
+                m = (int) time1.until(time2, ChronoUnit.MINUTES);
+
+                if (!hadLunch && m > shift.getlunchthresh()) {
+                    m -= shift.getlunchduration();
+                }
+
+                minutes += m;
             }
 
-            if (!hadLunch && minutes > shift.getlunchthresh()) {
-                minutes -= shift.getlunchduration();
-            }
 
         } catch (IndexOutOfBoundsException e) {
+            // this may break things
             return minutes;
         }
 
@@ -67,5 +73,15 @@ public final class DAOUtility {
 
         jsonString = JSONValue.toJSONString(json);
         return jsonString;
+    }
+
+    public static double calculateAbsenteeism(ArrayList<Punch> punchlist, Shift s) {
+        double percentage;
+        float min = calculateTotalMinutes(punchlist, s);
+        float worktime = (s.getshiftduration() - s.getlunchduration()) * 5;
+
+        percentage = ((worktime - min) / worktime);
+
+        return percentage;
     }
 }

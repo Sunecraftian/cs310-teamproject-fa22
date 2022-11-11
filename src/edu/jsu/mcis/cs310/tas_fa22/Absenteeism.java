@@ -1,6 +1,9 @@
 package edu.jsu.mcis.cs310.tas_fa22;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 
 public class Absenteeism {
     private final Employee employee;
@@ -10,7 +13,7 @@ public class Absenteeism {
 
     public Absenteeism(Employee employee, LocalDate payperiod, Double percentage) {
         this.employee = employee;
-        this.payperiod = payperiod;
+        this.payperiod = payperiod.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
         this.percentage = percentage;
     }
 
@@ -30,7 +33,7 @@ public class Absenteeism {
     @Override
     public String toString() {
         String result = String.format("#%s (Pay Period Starting %s): %.2f%%",
-                employee.getBadge().getId(), payperiod.toString(), percentage*100 );
+                employee.getBadge().getId(), payperiod.format(DateTimeFormatter.ofPattern("MM-dd-yyyy")), percentage*100 );
 
         return result;
     }
