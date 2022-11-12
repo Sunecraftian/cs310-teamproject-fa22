@@ -84,4 +84,33 @@ public final class DAOUtility {
 
         return percentage;
     }
+
+    public static String getPunchListPlusTotalsAsJSON(ArrayList<Punch> punchlist, Shift s){
+        String jsonString;
+        String absenteeism = String.format("%.2f%%", calculateAbsenteeism(punchlist, s)*100);
+        String totalminutes = String.valueOf(calculateTotalMinutes(punchlist, s));
+        JSONObject json = new JSONObject();
+        JSONArray punches = new JSONArray();
+
+        for (Punch punch : punchlist) {
+            JSONObject object = new JSONObject();
+
+            object.put("originaltimestamp", punch.getOriginaltimestamp().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toUpperCase());
+            object.put("badgeid", punch.getBadge().getId());
+            object.put("adjustedtimestamp", punch.getAdjustedtimestamp().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")).toUpperCase());
+            object.put("adjustmenttype", punch.getAdjustmentType().toString());
+            object.put("terminalid", String.valueOf(punch.getTerminalid()));
+            object.put("id", String.valueOf(punch.getId()));
+            object.put("punchtype", punch.getPunchtype().toString());
+
+            punches.add(object);
+        }
+
+        json.put("absenteeism", absenteeism);
+        json.put("totalminutes", totalminutes);
+        json.put("punchlist", punches);
+
+        jsonString = JSONValue.toJSONString(json);
+        return jsonString;
+    }
 }
