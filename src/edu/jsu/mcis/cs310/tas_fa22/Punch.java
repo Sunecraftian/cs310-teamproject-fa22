@@ -57,7 +57,6 @@ public class Punch {
         boolean outInterval = false, outGrace = false, outDock = false, outLunch = false;   // Clock Out Punches
 
 
-        // TODO: 10/29/2022 Add implementation if time is equal to the rules
         if (this.getPunchtype() == EventType.CLOCK_IN) {
             if (originalLocalTime.isAfter(intervalBeforeShift.minusSeconds(1)) && originalLocalTime.isBefore(shiftStart))
                 inInterval = true;
@@ -103,20 +102,24 @@ public class Punch {
                 return;
             }
         }
+        int roundinterval = s.getroundinterval();
+
         int sec = this.getOriginaltimestamp().getSecond();
-        int min = (sec >= 30) ? this.getOriginaltimestamp().plusMinutes(1).getMinute() : this.getOriginaltimestamp().getMinute();
-        if (sec >= 30) this.adjustedtimestamp = this.getOriginaltimestamp().plusMinutes(1);
+        int min = this.getOriginaltimestamp().getMinute();
 
-
-
-        if (min % 15 == 0) {
+        if (min % roundinterval == 0) {
             this.adjustedtimestamp = this.adjustedtimestamp.truncatedTo(ChronoUnit.MINUTES);
             this.adjustmentType = PunchAdjustmentType.NONE;
             return;
-        } else if (min % 15 < 8) {
-            this.adjustedtimestamp = this.adjustedtimestamp.truncatedTo(ChronoUnit.MINUTES).minusMinutes(min % 15);
-        } else if (min % 15 >= 8) {
-            this.adjustedtimestamp = this.adjustedtimestamp.truncatedTo(ChronoUnit.MINUTES).plusMinutes(15 - (min % 15));
+        }
+
+        min = (sec >= 30) ? this.getOriginaltimestamp().plusMinutes(1).getMinute() : this.getOriginaltimestamp().getMinute();
+        if (sec >= 30) this.adjustedtimestamp = this.getOriginaltimestamp().plusMinutes(1);
+
+        if (min % roundinterval < Math.ceil(roundinterval / 2f)) {
+            this.adjustedtimestamp = this.adjustedtimestamp.truncatedTo(ChronoUnit.MINUTES).minusMinutes(min % roundinterval);
+        } else if (min % roundinterval >= Math.ceil(roundinterval / 2f)) {
+            this.adjustedtimestamp = this.adjustedtimestamp.truncatedTo(ChronoUnit.MINUTES).plusMinutes(roundinterval - (min % roundinterval));
         }
         this.adjustmentType = PunchAdjustmentType.INTERVAL_ROUND;
     }
