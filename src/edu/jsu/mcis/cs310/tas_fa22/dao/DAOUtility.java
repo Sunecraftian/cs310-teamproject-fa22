@@ -35,8 +35,8 @@ public final class DAOUtility {
 
                 m = (int) time1.until(time2, ChronoUnit.MINUTES);
 
-                if (!hadLunch && m > shift.getlunchthresh()) {
-                    m -= shift.getlunchduration();
+                if (!hadLunch && m > shift.getLunchThreshold()) {
+                    m -= shift.getLunchDuration();
                 }
 
                 minutes += m;
@@ -51,6 +51,15 @@ public final class DAOUtility {
         return minutes;
     }
 
+    public static double calculateAbsenteeism(ArrayList<Punch> punchlist, Shift s) {
+        double percentage;
+        float min = calculateTotalMinutes(punchlist, s);
+        float worktime = (s.getShiftDuration() - s.getLunchDuration()) * 5;
+
+        percentage = ((worktime - min) / worktime);
+
+        return percentage;
+    }
 
     public static String getPunchListAsJSON(ArrayList<Punch> dailypunchlist) {
         String jsonString;
@@ -75,15 +84,6 @@ public final class DAOUtility {
         return jsonString;
     }
 
-    public static double calculateAbsenteeism(ArrayList<Punch> punchlist, Shift s) {
-        double percentage;
-        float min = calculateTotalMinutes(punchlist, s);
-        float worktime = (s.getshiftduration() - s.getlunchduration()) * 5;
-
-        percentage = ((worktime - min) / worktime);
-
-        return percentage;
-    }
 
     public static String getPunchListPlusTotalsAsJSON(ArrayList<Punch> punchlist, Shift s){
         String jsonString;

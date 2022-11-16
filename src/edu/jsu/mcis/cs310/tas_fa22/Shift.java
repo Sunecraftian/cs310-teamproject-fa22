@@ -4,79 +4,62 @@ import java.util.HashMap;
 import java.time.*;
 public class Shift {
 
-    private final int graceperiod, roundinterval, dock, id, lunchthresh, lunchduration,
-    shiftduration;
+    private final int id;
 
     private final String description;
-    private final LocalTime shiftstart, shiftstop, lunchstart, lunchstop;
+    private final DailySchedule defaultschedule;
 
-    //CONSTRUCTOR
-    public Shift(HashMap<String, String> map){
-        this.id = Integer.parseInt(map.get("id"));
-        this.description = map.get("description");
-        this.roundinterval = Integer.parseInt(map.get("roundinterval"));
-        this.graceperiod = Integer.parseInt(map.get("graceperiod"));
-        this.shiftstart = LocalTime.parse(map.get("shiftstart"));
-        this.shiftstop = LocalTime.parse(map.get("shiftstop"));
-        this.lunchstart = LocalTime.parse(map.get("lunchstart"));
-        this.lunchstop = LocalTime.parse(map.get("lunchstop"));
-        this.lunchthresh = Integer.parseInt(map.get("lunchthreshold"));
-        this.dock = Integer.parseInt(map.get("dockpenalty"));
-        this.lunchduration = (int)Duration.between(this.lunchstart, this.lunchstop).toMinutes();
-        this.shiftduration = (int)Duration.between(this.shiftstart, this.shiftstop).toMinutes();
+    private HashMap<Integer, DailySchedule> dailyScheduleList = new HashMap<>();
+
+    public Shift(int id, String description, DailySchedule defaultschedule){
+        this.id = id;
+        this.description = description;
+        this.defaultschedule = defaultschedule;
+
+        this.dailyScheduleList.put(DayOfWeek.MONDAY.getValue(), getDefaultSchedule());
+        this.dailyScheduleList.put(DayOfWeek.TUESDAY.getValue(), getDefaultSchedule());
+        this.dailyScheduleList.put(DayOfWeek.WEDNESDAY.getValue(), getDefaultSchedule());
+        this.dailyScheduleList.put(DayOfWeek.THURSDAY.getValue(), getDefaultSchedule());
+        this.dailyScheduleList.put(DayOfWeek.FRIDAY.getValue(), getDefaultSchedule());
     }
 
-    public int getid() {
-        return id;
-    }
+    public int getId() { return id; }
+    public String getDescription() { return description; }
 
-    public int getroundinterval() {
-        return roundinterval;
-    }
+    public DailySchedule getDefaultSchedule() { return defaultschedule; }
 
-    public int getgraceperiod() {
-        return graceperiod;
-    }
+//    public void setDefaultSchedule(DailySchedule defaultschedule) { this.defaultschedule = defaultschedule; }
 
-    public int getdock() {
-        return dock;
-    }
+    public DailySchedule getDailySchedule(DayOfWeek dayOfWeek) { return dailyScheduleList.get(dayOfWeek.getValue()); }
 
-    public LocalTime getlunchstart() {
-        return lunchstart;
-    }
+    public void setDailySchedule(DayOfWeek dayOfWeek, DailySchedule dailySchedule) { this.dailyScheduleList.replace(dayOfWeek.getValue(), dailySchedule); }
 
-    public int getlunchthresh() {
-        return lunchthresh;
-    }
 
-    public LocalTime getlunchstop() {
-        return lunchstop;
-    }
+    public int getRoundInterval() { return defaultschedule.getRoundInterval(); }
 
-    public String getdescription() {
-        return description;
-    }
+    public int getGracePeriod() { return defaultschedule.getGracePeriod(); }
 
-    public LocalTime getshiftstart() {
-        return shiftstart;
-    }
+    public int getDockPenalty() { return defaultschedule.getDockPenalty(); }
 
-    public LocalTime getshiftstop() {
-        return shiftstop;
-    }
+    public LocalTime getLunchStart() { return defaultschedule.getLunchStart(); }
 
-    public int getlunchduration() {
-        return lunchduration;
-    }
+    public int getLunchThreshold() { return defaultschedule.getLunchThreshhold(); }
 
-    public int getshiftduration() { return shiftduration; }
+    public LocalTime getLunchStop() { return defaultschedule.getLunchStop(); }
+
+    public LocalTime getShiftStart() { return defaultschedule.getShiftStart(); }
+
+    public LocalTime getShiftStop() { return defaultschedule.getShiftStop(); }
+
+    public int getLunchDuration() { return defaultschedule.getLunchDuration(); }
+
+    public int getShiftDuration() { return defaultschedule.getShiftDuration(); }
 
     @Override
      public String toString(){
         return String.format("%s: %s - %s (%d minutes); Lunch: %s - %s (%d minutes)",
-                getdescription(), getshiftstart().toString(), getshiftstop().toString(), getshiftduration(),
-                getlunchstart(), getlunchstop(), getlunchduration());
+                getDescription(), getShiftStart().toString(), getShiftStop().toString(), getShiftDuration(),
+                getLunchStart(), getLunchStop(), getLunchDuration());
     }
 }
 

@@ -39,18 +39,18 @@ public class Punch {
         int dayOfWeek = this.getOriginaltimestamp().getDayOfWeek().getValue();
         LocalTime originalLocalTime = this.getOriginaltimestamp().toLocalTime();
 
-        LocalTime intervalBeforeShift = s.getshiftstart().minus(s.getroundinterval(), ChronoUnit.MINUTES);
-        LocalTime shiftStart = s.getshiftstart();
-        LocalTime graceAfterStart = s.getshiftstart().plus(s.getgraceperiod(), ChronoUnit.MINUTES);
-        LocalTime dockAfterStart = s.getshiftstart().plus(s.getdock(), ChronoUnit.MINUTES);
+        LocalTime intervalBeforeShift = s.getShiftStart().minus(s.getRoundInterval(), ChronoUnit.MINUTES);
+        LocalTime shiftStart = s.getShiftStart();
+        LocalTime graceAfterStart = s.getShiftStart().plus(s.getGracePeriod(), ChronoUnit.MINUTES);
+        LocalTime dockAfterStart = s.getShiftStart().plus(s.getDockPenalty(), ChronoUnit.MINUTES);
 
-        LocalTime lunchStart = s.getlunchstart();
-        LocalTime lunchEnd = s.getlunchstop();
+        LocalTime lunchStart = s.getLunchStart();
+        LocalTime lunchEnd = s.getLunchStop();
 
-        LocalTime dockBeforeEnd = s.getshiftstop().minus(s.getdock(), ChronoUnit.MINUTES);
-        LocalTime graceBeforeEnd = s.getshiftstop().minus(s.getgraceperiod(), ChronoUnit.MINUTES);
-        LocalTime shiftEnd = s.getshiftstop();
-        LocalTime intervalAfterShift = s.getshiftstop().plus(s.getroundinterval(), ChronoUnit.MINUTES);
+        LocalTime dockBeforeEnd = s.getShiftStop().minus(s.getDockPenalty(), ChronoUnit.MINUTES);
+        LocalTime graceBeforeEnd = s.getShiftStop().minus(s.getGracePeriod(), ChronoUnit.MINUTES);
+        LocalTime shiftEnd = s.getShiftStop();
+        LocalTime intervalAfterShift = s.getShiftStop().plus(s.getRoundInterval(), ChronoUnit.MINUTES);
 
         boolean isWeekend = dayOfWeek == 6 || dayOfWeek == 7;  // Weekend Punch
         boolean inInterval = false, inGrace = false, inDock = false, inLunch = false;    // Clock In Punches
@@ -102,7 +102,7 @@ public class Punch {
                 return;
             }
         }
-        int roundinterval = s.getroundinterval();
+        int roundinterval = s.getRoundInterval();
 
         int sec = this.getOriginaltimestamp().getSecond();
         int min = this.getOriginaltimestamp().getMinute();
