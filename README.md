@@ -1,7 +1,7 @@
 # CS310 Team Project - Clock-In Clock-Out Machine
 
 ## Introduction
-This repository, "cs310-teamproject-fa22," represents a collaborative effort by a team of Software Engineering I students, including Suneet Sharma, Kennedy Blanks, Cole Massey, Jailon Lawrence, and Chloe Renfroe. The primary objective of this project was to design and develop a clock-in clock-out machine. The machine's purpose was to record employee clock-in and clock-out times and calculate their pay based on the hours worked, using a database system that stored employee information, shift details, pay rates, and timestamps.
+This repository, "cs310-teamproject-fa22," represents a collaborative effort by a team of Software Engineering I students, including Suneet Sharma (myself), Kennedy Blanks, Cole Massey, Jailon Lawrence, and Chloe Renfroe. The primary objective of this project was to design and develop a clock-in clock-out machine. The machine's purpose was to record employee clock-in and clock-out times and calculate their pay based on the hours worked, using a database system that stored employee information, shift details, pay rates, and timestamps.
 
 ## Methodology
 ### Program Overview
